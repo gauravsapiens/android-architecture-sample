@@ -1,6 +1,5 @@
 package com.hike.testapp.photoList.repository
 
-import com.google.gson.GsonBuilder
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

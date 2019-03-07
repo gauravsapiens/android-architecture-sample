@@ -11,7 +11,11 @@ import kotlinx.android.synthetic.main.item_photo.view.*
 
 class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    lateinit var photos: List<Photo>
+    var photos: List<Photo> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged() //TODO: Add diff util
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         object : RecyclerView.ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_photo, parent, false)) {}
@@ -20,10 +24,7 @@ class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.V
         Glide.with(context!!).load(photos[position].previewURL).into(holder.itemView.image).let { return }
 
     override fun getItemCount(): Int {
-        if (::photos.isInitialized) {
-            return photos.size
-        }
-        return 0
+        return photos.size
     }
 
 }
