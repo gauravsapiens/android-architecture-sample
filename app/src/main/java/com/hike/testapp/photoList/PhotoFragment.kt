@@ -56,5 +56,21 @@ class PhotoFragment : Fragment() {
         photoViewModel.photosList.observe(this, Observer {
             photosAdapter.photos = it
         })
+
+        photoViewModel.state.observe(this, Observer {
+            when (it) {
+                State.LOADING -> {
+                    progress_bar.visibility = View.VISIBLE
+                    recycler_view.visibility = View.GONE
+                }
+                State.DEFAULT -> {
+                    progress_bar.visibility = View.GONE
+                    recycler_view.visibility = View.VISIBLE
+                }
+                State.PAGINATING -> {
+
+                }
+            }
+        })
     }
 }

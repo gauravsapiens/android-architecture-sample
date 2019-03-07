@@ -15,26 +15,41 @@ class PhotoViewModel(application: Application) : AndroidViewModel(application) {
     private var page = 1
 
     val photosList = MutableLiveData<MutableList<Photo>>()
+    val state = MutableLiveData<State>()
 
     fun loadPhotos(query: String) {
         this.query = query
+        state.value = State.LOADING
+
         photoRepository.loadPhotos(query, 1)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { result -> photosList.value = ArrayList<Photo>().apply { addAll(result.hits) } },
+                { result ->
+                    state.value = State.DEFAULT
+                    photosList.value = ArrayList<Photo>().apply { addAll(result.hits) }
+                },
                 { it.printStackTrace() }
             )
     }
 
     fun loadNextPage() {
+        state.value = State.PAGINATING
+
         photoRepository.loadPhotos(query, ++page)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { result -> photosList.value = photosList.value.apply { this!!.addAll(result.hits) } },
+                { result ->
+                    state.value = State.DEFAULT
+                    photosList.value = photosList.value.apply { this!!.addAll(result.hits) }
+                },
                 { it.printStackTrace() }
             )
     }
 
+}
+
+enum class State {
+    LOADING, PAGINATING, DEFAULT
 }
