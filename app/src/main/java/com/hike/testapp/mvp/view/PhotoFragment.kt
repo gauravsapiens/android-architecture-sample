@@ -69,7 +69,7 @@ class PhotoFragment : Fragment(), com.hike.testapp.mvp.view.View {
     }
 
     override fun appendToList(photos: List<Photo>) {
-        photosAdapter.photos = photos
+        photosAdapter.addPhotos(photos)
     }
 
     fun setupListPagination() {

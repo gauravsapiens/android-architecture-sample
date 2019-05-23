@@ -51,15 +51,15 @@ class PhotoFragment : Fragment() {
             }
         })
 
-        val query = arguments?.getString("searchText") ?: ""
-
         //Fire default load action
-        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadPhotos(1))
+        val query = arguments?.getString("searchText") ?: ""
+        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadFirstPage(query))
     }
 
     private fun onStateUpdated(state: State) =
         when (state) {
-            PhotoListState.Loading -> {
+
+            is PhotoListState.Loading -> {
                 progress_bar.visibility = View.VISIBLE
                 recycler_view.visibility = View.GONE
             }
@@ -68,12 +68,6 @@ class PhotoFragment : Fragment() {
                 progress_bar.visibility = View.GONE
                 recycler_view.visibility = View.VISIBLE
                 photosAdapter.photos = state.photos
-                photosAdapter.notifyDataSetChanged()
-            }
-
-            is PhotoListState.Failure -> {
-                progress_bar.visibility = View.VISIBLE
-                recycler_view.visibility = View.GONE
             }
 
             else -> {
@@ -87,7 +81,7 @@ class PhotoFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    PhotoListAction.LoadPhotos(1)
+                    Redux.INSTANCE.store.dispatch(PhotoListAction.LoadNextPage)
                 }
             }
 

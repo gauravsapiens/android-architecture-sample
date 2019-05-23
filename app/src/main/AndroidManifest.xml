@@ -13,7 +13,7 @@
             android:theme="@style/AppTheme">
 
 
-        <activity android:name="com.hike.testapp.mvvm.view.PhotoActivity">
+        <activity android:name="com.hike.testapp.mvi.view.PhotoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

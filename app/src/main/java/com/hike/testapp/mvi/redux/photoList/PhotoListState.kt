@@ -5,9 +5,9 @@ import com.hike.testapp.mvi.core.State
 
 sealed class PhotoListState : State() {
 
-    object Loading : PhotoListState()
+    data class Loading(val query: String, val page: Int) : PhotoListState()
 
-    data class Default(val page: Int, val photos: List<Photo>) : PhotoListState()
+    data class Default(val query: String, val page: Int, val photos: List<Photo>) : PhotoListState()
 
     object Failure : PhotoListState()
 

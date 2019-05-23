@@ -34,4 +34,12 @@ class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.V
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun addPhotos(photoList: List<Photo>) {
+        val _photos = mutableListOf<Photo>()
+        _photos.apply {
+            addAll(photos)
+            addAll(photoList)
+        }
+        photos = _photos
+    }
 }

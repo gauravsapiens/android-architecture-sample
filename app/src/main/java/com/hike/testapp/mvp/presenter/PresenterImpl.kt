@@ -9,7 +9,7 @@ class PresenterImpl : Presenter {
 
     val photoRepository = PhotoRepository.instance
     var view: View? = null
-    var query = "hello"
+    var query = ""
     var page = 1
 
     override fun loadPhotos(query: String) {

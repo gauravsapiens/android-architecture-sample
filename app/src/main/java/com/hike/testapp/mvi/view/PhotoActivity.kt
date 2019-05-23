@@ -14,7 +14,7 @@ class PhotoActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(
                 R.id.content_frame,
-                PhotoFragment.newInstance("Hello")
+                PhotoFragment.newInstance("cat")
             )
             .commit()
     }
