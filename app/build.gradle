@@ -27,34 +27,41 @@ dependencies {
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    //Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
+    //AndroidX
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.core:core-ktx:1.1.0-alpha04'
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
 
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
+    //RxJava
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
+    //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
     implementation "com.squareup.retrofit2:converter-gson:2.3.0"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
 
+    //Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
 
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    //Koin
+    implementation "org.koin:koin-androidx-scope:+"
+    implementation "org.koin:koin-androidx-viewmodel:+"
 
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
-
+    //Unit test dependencies
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:2.27.0"
     testImplementation 'org.assertj:assertj-core:+'
     testImplementation "android.arch.core:core-testing:+"
 
-    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
-
+    //Instrumentation test dependencies
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 
 }

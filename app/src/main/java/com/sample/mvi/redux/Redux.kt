@@ -7,10 +7,11 @@ import com.sample.mvi.redux.photoList.PhotoListState
 
 class Redux {
 
-    companion object {
-        val INSTANCE = Redux()
-    }
-
-    val store = ReduxStore(PhotoListState.Loading("", 1), listOf(PhotoListReducer()), listOf(PhotoListSideEffects()), emptyList())
+    val store = ReduxStore(
+        PhotoListState.Loading("", 1),
+        listOf(PhotoListReducer()),
+        listOf(PhotoListSideEffects()),
+        emptyList()
+    )
 
 }

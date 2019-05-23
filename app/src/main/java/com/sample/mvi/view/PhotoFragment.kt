@@ -16,8 +16,10 @@ import com.sample.mvi.redux.Redux
 import com.sample.mvi.redux.photoList.PhotoListAction
 import com.sample.mvi.redux.photoList.PhotoListState
 import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-class PhotoFragment : Fragment() {
+class PhotoFragment : Fragment(), KoinComponent {
 
     companion object {
 
@@ -30,6 +32,7 @@ class PhotoFragment : Fragment() {
     }
 
     private lateinit var photosAdapter: PhotosAdapter
+    private val redux by inject<Redux>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_main, container, false)
@@ -45,7 +48,7 @@ class PhotoFragment : Fragment() {
         setupListPagination()
 
         //Subscribe to state changes
-        Redux.INSTANCE.store.subscribe(object : StateChangeListener {
+        redux.store.subscribe(object : StateChangeListener {
             override fun onUpdate(state: State) {
                 onStateUpdated(state)
             }
@@ -53,7 +56,7 @@ class PhotoFragment : Fragment() {
 
         //Fire default load action
         val query = arguments?.getString("searchText") ?: ""
-        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadFirstPage(query))
+        redux.store.dispatch(PhotoListAction.LoadFirstPage(query))
     }
 
     private fun onStateUpdated(state: State) =
@@ -81,7 +84,7 @@ class PhotoFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    Redux.INSTANCE.store.dispatch(PhotoListAction.LoadNextPage)
+                    redux.store.dispatch(PhotoListAction.LoadNextPage)
                 }
             }
 

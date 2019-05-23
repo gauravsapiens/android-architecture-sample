@@ -4,10 +4,12 @@ import com.sample.common.model.PhotoRepository
 import com.sample.mvp.view.View
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 
-class PresenterImpl : Presenter {
+class PresenterImpl : Presenter, KoinComponent {
 
-    val photoRepository = PhotoRepository.instance
+    val photoRepository by inject<PhotoRepository>()
     var view: View? = null
     var query = ""
     var page = 1
