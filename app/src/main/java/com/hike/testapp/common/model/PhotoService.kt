@@ -1,4 +1,4 @@
-package com.hike.testapp.photoList.repository
+package com.hike.testapp.common.model
 
 import io.reactivex.Observable
 import okhttp3.OkHttpClient

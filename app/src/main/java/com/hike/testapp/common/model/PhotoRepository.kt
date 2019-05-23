@@ -1,8 +1,8 @@
-package com.hike.testapp.photoList.repository
+package com.hike.testapp.common.model
 
 import io.reactivex.Observable
 
-class PhotoRepository {
+open class PhotoRepository {
 
     companion object {
         val instance = PhotoRepository()

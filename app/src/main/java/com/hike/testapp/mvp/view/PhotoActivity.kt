@@ -1,4 +1,4 @@
-package com.hike.testapp.photoList
+package com.hike.testapp.mvp.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +12,10 @@ class PhotoActivity : AppCompatActivity() {
 
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.content_frame, PhotoFragment.newInstance("Hello"))
+            .replace(
+                R.id.content_frame,
+                PhotoFragment.newInstance("Hello")
+            )
             .commit()
     }
 }

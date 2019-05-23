@@ -1,4 +1,4 @@
-package com.hike.testapp.photoList
+package com.hike.testapp.common
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hike.testapp.R
-import com.hike.testapp.photoList.repository.Photo
+import com.hike.testapp.common.model.Photo
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

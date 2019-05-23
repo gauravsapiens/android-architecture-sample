@@ -1,4 +1,4 @@
-package com.hike.testapp.photoList
+package com.hike.testapp.mvi.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,11 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hike.testapp.R
+import com.hike.testapp.common.PhotosAdapter
+import com.hike.testapp.mvi.core.State
+import com.hike.testapp.mvi.core.StateChangeListener
+import com.hike.testapp.mvi.redux.Redux
+import com.hike.testapp.mvi.redux.photoList.PhotoListAction
+import com.hike.testapp.mvi.redux.photoList.PhotoListState
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class PhotoFragment : Fragment() {
@@ -19,13 +24,12 @@ class PhotoFragment : Fragment() {
 
         fun newInstance(searchText: String): PhotoFragment {
             val fragment = PhotoFragment()
-            val bundle = bundleOf(Pair("searchText", searchText)) //Note Extension
+            val bundle = bundleOf(Pair("searchText", searchText))
             fragment.arguments = bundle
             return fragment
         }
     }
 
-    private lateinit var photoViewModel: PhotoViewModel
     private lateinit var photosAdapter: PhotosAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,33 +48,46 @@ class PhotoFragment : Fragment() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    photoViewModel.loadNextPage()
+                    PhotoListAction.LoadPhotos(1)
                 }
             }
         })
 
         val query = arguments?.getString("searchText") ?: ""
-        photoViewModel = ViewModelProviders.of(this).get(PhotoViewModel::class.java)
-        photoViewModel.loadPhotos(query)
 
-        photoViewModel.photosList.observe(this, Observer {
-            photosAdapter.photos = it
-        })
-
-        photoViewModel.state.observe(this, Observer {
-            when (it) {
-                State.LOADING -> {
-                    progress_bar.visibility = View.VISIBLE
-                    recycler_view.visibility = View.GONE
-                }
-                State.DEFAULT -> {
-                    progress_bar.visibility = View.GONE
-                    recycler_view.visibility = View.VISIBLE
-                }
-                State.PAGINATING -> {
-
-                }
+        Redux.INSTANCE.store.subscribe(object : StateChangeListener {
+            override fun onUpdate(state: State) {
+                onStateUpdated(state)
             }
         })
+
+        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadPhotos(1))
+
     }
+
+    fun onStateUpdated(state: State) =
+        when (state) {
+            PhotoListState.Loading -> {
+                progress_bar.visibility = View.VISIBLE
+                recycler_view.visibility = View.GONE
+            }
+
+            is PhotoListState.Default -> {
+                progress_bar.visibility = View.GONE
+                recycler_view.visibility = View.VISIBLE
+                photosAdapter.photos = state.photos
+                photosAdapter.notifyDataSetChanged()
+            }
+
+            is PhotoListState.Failure -> {
+                progress_bar.visibility = View.VISIBLE
+                recycler_view.visibility = View.GONE
+            }
+
+            else -> {
+
+            }
+        }
+
+
 }

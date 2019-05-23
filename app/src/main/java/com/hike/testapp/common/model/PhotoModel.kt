@@ -1,4 +1,4 @@
-package com.hike.testapp.photoList.repository
+package com.hike.testapp.common.model
 
 data class PhotoResponse(val hits: List<Photo>)
 

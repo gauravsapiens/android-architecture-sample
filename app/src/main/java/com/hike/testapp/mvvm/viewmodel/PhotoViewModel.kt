@@ -1,16 +1,14 @@
-package com.hike.testapp.photoList
+package com.hike.testapp.mvvm.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.hike.testapp.photoList.repository.Photo
-import com.hike.testapp.photoList.repository.PhotoRepository
+import androidx.lifecycle.ViewModel
+import com.hike.testapp.common.model.Photo
+import com.hike.testapp.common.model.PhotoRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class PhotoViewModel(application: Application) : AndroidViewModel(application) {
+class PhotoViewModel(val photoRepository: PhotoRepository) : ViewModel() {
 
-    private val photoRepository = PhotoRepository.instance
     private lateinit var query: String
     private var page = 1
 
