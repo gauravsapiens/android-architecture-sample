@@ -1,6 +1,6 @@
 package com.hike.testapp.mvi.core
 
-class ReduxStore(initialState: State, val reducers: List<Reducer>, val sideEffects: List<SideEffects>) : Store {
+class ReduxStore(initialState: State, val reducers: List<Reducer>, val sideEffects: List<SideEffects>, val middleware: List<Middleware>) : Store {
 
     var currentState = initialState
     val stateChangeListeners = mutableListOf<StateChangeListener>()
@@ -13,6 +13,10 @@ class ReduxStore(initialState: State, val reducers: List<Reducer>, val sideEffec
 
         sideEffects.forEach {
             it.runEffects(action, currentState, this)
+        }
+
+        middleware.forEach{
+            it.applyMiddleware(action, currentState)
         }
     }
 
@@ -38,8 +42,8 @@ class ReduxStore(initialState: State, val reducers: List<Reducer>, val sideEffec
     }
 
     fun notifyListeners() {
-        stateChangeListeners.forEach({
+        stateChangeListeners.forEach{
             it.onUpdate(currentState)
-        })
+        }
     }
 }

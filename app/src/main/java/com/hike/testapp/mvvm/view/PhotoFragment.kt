@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hike.testapp.mvvm.PhotoViewModelFactory
 import com.hike.testapp.R
-import com.hike.testapp.common.PhotosAdapter
+import com.hike.testapp.common.adapter.PhotosAdapter
+import com.hike.testapp.mvvm.PhotoViewModelFactory
 import com.hike.testapp.mvvm.viewmodel.PhotoViewModel
 import com.hike.testapp.mvvm.viewmodel.State
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -43,25 +43,13 @@ class PhotoFragment : Fragment() {
         recycler_view.adapter = photosAdapter
         recycler_view.layoutManager = LinearLayoutManager(context)
 
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    photoViewModel.loadNextPage()
-                }
-            }
-        })
+        setupListPagination()
 
         val query = arguments?.getString("searchText") ?: ""
-        photoViewModel = ViewModelProviders.of(this,
-            PhotoViewModelFactory()
-        ).get(PhotoViewModel::class.java)
+        photoViewModel = ViewModelProviders.of(this, PhotoViewModelFactory()).get(PhotoViewModel::class.java)
         photoViewModel.loadPhotos(query)
 
-        photoViewModel.photosList.observe(this, Observer {
-            photosAdapter.photos = it
-        })
+        photoViewModel.photosList.observe(this, Observer { photosAdapter.photos = it })
 
         photoViewModel.state.observe(this, Observer {
             when (it) {
@@ -75,6 +63,18 @@ class PhotoFragment : Fragment() {
                 }
                 State.PAGINATING -> {
 
+                }
+            }
+        })
+    }
+
+    private fun setupListPagination() {
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    photoViewModel.loadNextPage()
                 }
             }
         })

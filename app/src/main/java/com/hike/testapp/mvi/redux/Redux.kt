@@ -11,6 +11,6 @@ class Redux {
         val INSTANCE = Redux()
     }
 
-    val store = ReduxStore(PhotoListState.Loading, listOf(PhotoListReducer()), listOf(PhotoListSideEffects()))
+    val store = ReduxStore(PhotoListState.Loading, listOf(PhotoListReducer()), listOf(PhotoListSideEffects()), emptyList())
 
 }

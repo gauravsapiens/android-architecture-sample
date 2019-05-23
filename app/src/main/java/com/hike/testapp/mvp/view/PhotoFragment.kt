@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hike.testapp.R
-import com.hike.testapp.common.PhotosAdapter
+import com.hike.testapp.common.adapter.PhotosAdapter
 import com.hike.testapp.common.model.Photo
 import com.hike.testapp.mvp.presenter.Presenter
 import com.hike.testapp.mvp.presenter.PresenterImpl

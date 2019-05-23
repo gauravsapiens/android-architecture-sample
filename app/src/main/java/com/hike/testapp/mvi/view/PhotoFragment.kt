@@ -9,13 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hike.testapp.R
-import com.hike.testapp.common.PhotosAdapter
+import com.hike.testapp.common.adapter.PhotosAdapter
 import com.hike.testapp.mvi.core.State
 import com.hike.testapp.mvi.core.StateChangeListener
 import com.hike.testapp.mvi.redux.Redux
 import com.hike.testapp.mvi.redux.photoList.PhotoListAction
 import com.hike.testapp.mvi.redux.photoList.PhotoListState
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.fragment_main.*
 
 class PhotoFragment : Fragment() {
@@ -43,29 +42,22 @@ class PhotoFragment : Fragment() {
         recycler_view.adapter = photosAdapter
         recycler_view.layoutManager = LinearLayoutManager(context)
 
-        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        setupListPagination()
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    PhotoListAction.LoadPhotos(1)
-                }
-            }
-        })
-
-        val query = arguments?.getString("searchText") ?: ""
-
+        //Subscribe to state changes
         Redux.INSTANCE.store.subscribe(object : StateChangeListener {
             override fun onUpdate(state: State) {
                 onStateUpdated(state)
             }
         })
 
-        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadPhotos(1))
+        val query = arguments?.getString("searchText") ?: ""
 
+        //Fire default load action
+        Redux.INSTANCE.store.dispatch(PhotoListAction.LoadPhotos(1))
     }
 
-    fun onStateUpdated(state: State) =
+    private fun onStateUpdated(state: State) =
         when (state) {
             PhotoListState.Loading -> {
                 progress_bar.visibility = View.VISIBLE
@@ -89,5 +81,17 @@ class PhotoFragment : Fragment() {
             }
         }
 
+    private fun setupListPagination() {
+        recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    PhotoListAction.LoadPhotos(1)
+                }
+            }
+
+        })
+
+    }
 }

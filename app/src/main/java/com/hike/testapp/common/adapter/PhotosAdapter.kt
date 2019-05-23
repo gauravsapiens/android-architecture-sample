@@ -1,8 +1,9 @@
-package com.hike.testapp.common
+package com.hike.testapp.common.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hike.testapp.R
@@ -13,8 +14,9 @@ class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.V
 
     var photos: List<Photo> = listOf()
         set(value) {
+            val oldList = field
             field = value
-            notifyDataSetChanged() //TODO: Add diff util
+            refreshList(value, oldList)
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
@@ -25,6 +27,11 @@ class PhotosAdapter(val context: Context?) : RecyclerView.Adapter<RecyclerView.V
 
     override fun getItemCount(): Int {
         return photos.size
+    }
+
+    fun refreshList(newList: List<Photo>, oldList: List<Photo>) {
+        val diffResult = DiffUtil.calculateDiff(PhotosDiffCallback(newList, oldList))
+        diffResult.dispatchUpdatesTo(this)
     }
 
 }
